@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>자낳대 모의 경매</title>
+    
+    <meta charset="utf8" />
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-1.8.0.min.js"></script>
+	<link rel="stylesheet" href="./style.css">
+  </head>
+<body>
+	<div class="container">
+		<div id="lobby_container" class="lobby">
+			<h1 class="title_text">자낳대</h1>
+			<h2 class="sub_title">모의 경매 (BETA)</h2>
+			<div class="button_div">
+				<button id="button_start" class="lobby_button" value="start">게임 시작</button>
+			</div>
+			<div class="button_div">
+				<button id="button_host" class="lobby_button" value="host">방 생성</button>
+			</div>
+			<div class="button_div">
+				<button id="button_enter" class="lobby_button" value="enter">방 참가</button>
+			</div>
+			<h2 class="sub_title" style="font-size:20px; margin: 0px;">AM 00:00 ~ AM 0:20 상시 점검 및 업데이트</h2>
+		</div>
+		<!-- The Modal -->
+		<div id="SearchModal" class="modal">
+			<!-- Modal content -->
+			<div class="modal_content">
+				<span id="SearchModalClose" class="close">&times;</span>
+				<p>
+					<span id="CurrentWaitingText">0</span>
+					<span>/6</span>
+				</p>
+			</div>
+		</div>
+		<div id="CreateModal" class="modal">
+			<!-- Modal content -->
+			<div class="modal_content">
+				<!-- Options -->
+				<div class="_table">
+					<div class="_row">
+						<div class="_cell _left_cell">방 ID</div>
+						<div class="_cell _right_cell">
+							<input id="create_room_id" class="text_input" type="text"/>
+						</div>
+					</div>
+					<div class="_row">
+						<div class="_cell _left_cell">경매 대기 시간</div>
+						<div class="_cell _right_cell">
+							<select class="drop_input" name="create_room_wait_time" id="create_room_wait_time">
+								<option value="3">3</option>
+								<option value="5" selected>5</option>
+								<option value="8">8</option>
+								<option value="10">10</option>
+							</select>
+						</div>
+					</div>
+					<div class="_row">
+						<div class="_cell _left_cell">경매 시간</div>
+						<div class="_cell _right_cell">
+							<select class="drop_input" name="create_room_auction_time" id="create_room_auction_time">
+								<option value="3">3</option>
+								<option value="5">5</option>
+								<option value="8" selected>8</option>
+								<option value="10">10</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div style="margin:10px;">
+					<span id="custom_joined_text_create">0</span>
+					<span>/6</span>
+				</div>
+				<div>
+					<button id="create_room_do" class="action_button" style="width:300px; margin:20px;">생성</button>
+					<button id="create_room_close" class="action_button" style="width:300px; margin:20px;">닫기</button>
+				</div>
+			</div>
+		</div>
+		
+		<div id="EnterModal" class="modal">
+			<!-- Modal content -->
+			<div class="modal_content">
+				<!-- Options -->
+				<div class="_table">
+					<div class="_row">
+						<div class="_cell _left_cell">방 ID</div>
+						<div class="_cell _right_cell">
+							<input id="join_room_id" class="text_input" type="text"/>
+						</div>
+					</div>
+				</div>
+				<div style="margin:10px;">
+					<span id="custom_joined_text_join">0</span>
+					<span>/6</span>
+				</div>
+				<div>
+					<button id="join_room_do" class="action_button" style="width:300px; margin:20px;">참가</button>
+					<button id="join_room_close" class="action_button" style="width:300px; margin:20px;">닫기</button>
+				</div>
+			</div>
+		</div>
+		<div id="ingame_container" class="ingame">
+			<div class="player">
+				<div class="player_box">
+					<div class="player_box_start">
+						<div style="display:block;">
+							<div style="text-align:center; margin: 20px auto;">당신의 팀은</div>
+							<div style="text-align:center; margin: 20px auto;">
+								<span id="team_name_at_start">&nbsp;</span>
+								<span>팀 입니다.</span>
+							</div>
+						</div>
+					</div>
+					<div class="player_box_ingame">
+						<div class="player_img">
+							<img id="player_img_0" class="player_img"/>
+							<img id="player_img_1" class="player_img" style="display:none;"/>
+							<img id="player_img_2" class="player_img" style="display:none;"/>
+							<img id="player_img_3" class="player_img" style="display:none;"/>
+							<img id="player_img_4" class="player_img" style="display:none;"/>
+							<img id="player_img_5" class="player_img" style="display:none;"/>
+							<img id="player_img_6" class="player_img" style="display:none;"/>
+							<img id="player_img_7" class="player_img" style="display:none;"/>
+							<img id="player_img_8" class="player_img" style="display:none;"/>
+							<img id="player_img_9" class="player_img" style="display:none;"/>
+							<img id="player_img_10" class="player_img" style="display:none;"/>
+							<img id="player_img_11" class="player_img" style="display:none;"/>
+							<img id="player_img_12" class="player_img" style="display:none;"/>
+							<img id="player_img_13" class="player_img" style="display:none;"/>
+							<img id="player_img_14" class="player_img" style="display:none;"/>
+							<img id="player_img_15" class="player_img" style="display:none;"/>
+							<img id="player_img_16" class="player_img" style="display:none;"/>
+							<img id="player_img_17" class="player_img" style="display:none;"/>
+							<img id="player_img_18" class="player_img" style="display:none;"/>
+							<img id="player_img_19" class="player_img" style="display:none;"/>
+							<img id="player_img_20" class="player_img" style="display:none;"/>
+							<img id="player_img_21" class="player_img" style="display:none;"/>
+							<img id="player_img_22" class="player_img" style="display:none;"/>
+							<img id="player_img_23" class="player_img" style="display:none;"/>
+							<img id="player_img_24" class="player_img" style="display:none;"/>
+							<img id="player_img_25" class="player_img" style="display:none;"/>
+							<img id="player_img_26" class="player_img" style="display:none;"/>
+							<img id="player_img_27" class="player_img" style="display:none;"/>
+							<img id="player_img_28" class="player_img" style="display:none;"/>
+							<img id="player_img_29" class="player_img" style="display:none;"/>
+							<img id="player_img_30" class="player_img" style="display:none;"/>
+						</div>
+						<div class="player_sub_box">
+							<div style="height:30%;">
+								<span class="info_icon">
+									<img id="position_icon_top" class="icon"/>
+									<img id="position_icon_jug" class="icon" style="display:none;"/>
+									<img id="position_icon_mid" class="icon" style="display:none;"/>
+									<img id="position_icon_bot" class="icon" style="display:none;"/>
+									<img id="position_icon_sup" class="icon" style="display:none;"/>
+								</span>
+								<span class="info_text">
+									<span id="player_name">강소연</span>
+								</span>
+							</div>
+							<div style="height:30%;">
+								<span class="info_icon">
+									<img id="tier_icon_iron" class="icon"/>
+									<img id="tier_icon_bronze" class="icon" style="display:none;"/>
+									<img id="tier_icon_silver" class="icon" style="display:none;"/>
+									<img id="tier_icon_gold" class="icon" style="display:none;"/>
+									<img id="tier_icon_platinum" class="icon" style="display:none;"/>
+									<img id="tier_icon_diamond" class="icon" style="display:none;"/>
+									<img id="tier_icon_master" class="icon" style="display:none;"/>
+									<img id="tier_icon_grandmaster" class="icon" style="display:none;"/>
+									<img id="tier_icon_challenger" class="icon" style="display:none;"/>
+								</span>
+								<span class="info_text">
+									<span id="tier_name">Platinum 4</span>
+								</span>
+							</div>
+							<div style="height:35%; text-align:center;">
+								<div style="display: flex; justify-content: center; align-items: center; height:100%;">
+									<span id="info_who">&nbsp;</span>
+									<span id="info_money">&nbsp;</span>
+									<span id="info_timer">5</span>
+								</div>
+							</div>
+							<div style="height:5%;">
+								<progress value="0" max="10" id="progressBar" style="width:100%;"/>
+							</div>
+						</div>
+					</div>
+					<div class="player_box_finished">
+						<div>
+							<p style="text-align:center; font-family:'neodgm'; color:#CCCCCC; font-size:30px;">경매가 끝났습니다.</p>
+							<button class="action_button" id="action_view_point" type="button" style="margin:20px auto;">
+								<span>포인트 확인</span>
+							</button>
+							<button class="action_button" id="action_close" type="button">
+								<span>나가기</span>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="input">
+				<form style="max-width:1040px; margin: 0 auto; display:flex;" onSubmit="return false;">
+					<div style="width:60%; display: inline-block;height:100%; margin:10px;">
+						<input placeholder="포인트 (단위 5)" id="action_enter" onfocus="this.value=''" type="number" value="+5 입찰" style="width:90%; height:95%; font-size:30px; text-align:right;"/>
+					</div>
+					<div style="width:20%; display: inline-block;">
+						<button class="action_button" id="action_enter_button" type="button">
+							<span>입찰</span>
+						</button>
+					</div>
+					<div style="width:20%; display: inline-block;">
+						<button class="action_button" id="action_check" type="button">
+							<span>+5</span>
+						</button>
+					</div>
+				</form>
+			</div>
+			<div class="team_container">
+				<div id="team0" class="team">
+					<div class="team_info">
+						<div class="team_info_name">갱맘</div>
+						<div class="team_info_point">1000</div>
+					</div>
+					<div class="team_squad">
+						<span class="selected_player lineup_top">
+							<div class="selected_player_image"></div>
+							<div class="selected_player_text">
+								<div class="selected_player_text_name"></div>
+								<div class="selected_player_text_point"></div>
+							</div>
+						</span>
+						<span class="selected_player lineup_jug">
+							<div class="selected_player_image"></div>
+							<div class="selected_player_text">
+								<div class="selected_player_text_name"></div>
+								<div class="selected_player_text_point"></div>
+							</div>
+						</span>
+						<span class="selected_player lineup_mid">
+							<div class="selected_player_image"></div>
+							<div class="selected_player_text">
+								<div class="selected_player_text_name"></div>
+								<div class="selected_player_text_point"></div>
+							</div>
+						</span>
+						<span class="selected_player lineup_bot">
+							<div class="selected_player_image"></div>
+							<div class="selected_player_text">
+								<div class="selected_player_text_name"></div>
+								<div class="selected_player_text_point"></div>
+							</div>
+						</span>
+						<span class="selected_player lineup_sup">
+							<div class="selected_player_image"></div>
+							<div class="selected_player_text">
+								<div class="selected_player_text_name"></div>
+								<div class="selected_player_text_point"></div>
+							</div>
+						</span>
+					</div>
+				</div>
+				<div id="team1" class="team">
+					<div class="team_info">
+						<div class="team_info_name">플레임</div>
+						<div class="team_info_point">1000</div>
+					</div>
+					<div class="team_squad">
+						<span class="selected_player lineup_top">
+							<div class="selected_player_image"></div>
+							<div class="selected_player_text">
+								<div class="selected_player_text_name"></div>
+								<div class="selected_player_text_point"></div>
+							</div>
+						</span>
+						<span class="selected_player lineup_jug">
+							<div class="selected_player_image"></div>
+							<div class="selected_player_text">
+								<div class="selected_player_text_name"></div>
+								<div class="selected_player_text_point"></div>
+							</div>
+						</span>
+						<span class="selected_player lineup_mid">
+							<div class="selected_player_image"></div>
+							<div class="selected_player_text">
+								<div class="selected_player_text_name"></div>
+								<div class="selected_player_text_point"></div>
+							</div>
+						</span>
+						<span class="selected_player lineup_bot">
+							<div class="selected_player_image"></div>
+							<div class="selected_player_text">
+								<div class="selected_player_text_name"></div>
+								<div class="selected_player_text_point"></div>
+							</div>
+						</span>
+						<span class="selected_player lineup_sup">
+							<div class="selected_player_image"></div>
+							<div class="selected_player_text">
+								<div class="selected_player_text_name"></div>
+								<div class="selected_player_text_point"></div>
+							</div>
+						</span>
+					</div>
+				</div>
+				<div id="team2" class="team">
+					<div class="team_info">
+						<div class="team_info_name">큐베</div>
+						<div class="team_info_point">1000</div>
+					</div>
+					<div class="team_squad">
+						<span class="selected_player lineup_top">
+							<div class="selected_player_image"></div>
+							<div class="selected_player_text">
+								<div class="selected_player_text_name"></div>
+								<div class="selected_player_text_point"></div>
+							</div>
+						</span>
+						<span class="selected_player lineup_jug">
+							<div class="selected_player_image"></div>
+							<div class="selected_player_text">
+								<div class="selected_player_text_name"></div>
+								<div class="selected_player_text_point"></div>
+							</div>
+						</span>
+						<span class="selected_player lineup_mid">
+							<div class="selected_player_image"></div>
+							<div class="selected_player_text">
+								<div class="selected_player_text_name"></div>
+								<div class="selected_player_text_point"></div>
+							</div>
+						</span>
+						<span class="selected_player lineup_bot">
+							<div class="selected_player_image"></div>
+							<div class="selected_player_text">
+								<div class="selected_player_text_name"></div>
+								<div class="selected_player_text_point"></div>
+							</div>
+						</span>
+						<span class="selected_player lineup_sup">
+							<div class="selected_player_image"></div>
+							<div class="selected_player_text">
+								<div class="selected_player_text_name"></div>
+								<div class="selected_player_text_point"></div>
+							</div>
+						</span>
+					</div>
+				</div>
+				<div id="team3" class="team">
+					<div class="team_info">
+						<div class="team_info_name">왜냐맨</div>
+						<div class="team_info_point">1000</div>
+					</div>
+					
+					<div class="team_squad">
+						<span class="selected_player lineup_top">
+							<div class="selected_player_image"></div>
+							<div class="selected_player_text">
+								<div class="selected_player_text_name"></div>
+								<div class="selected_player_text_point"></div>
+							</div>
+						</span>
+						<span class="selected_player lineup_jug">
+							<div class="selected_player_image"></div>
+							<div class="selected_player_text">
+								<div class="selected_player_text_name"></div>
+								<div class="selected_player_text_point"></div>
+							</div>
+						</span>
+						<span class="selected_player lineup_mid">
+							<div class="selected_player_image"></div>
+							<div class="selected_player_text">
+								<div class="selected_player_text_name"></div>
+								<div class="selected_player_text_point"></div>
+							</div>
+						</span>
+						<span class="selected_player lineup_bot">
+							<div class="selected_player_image"></div>
+							<div class="selected_player_text">
+								<div class="selected_player_text_name"></div>
+								<div class="selected_player_text_point"></div>
+							</div>
+						</span>
+						<span class="selected_player lineup_sup">
+							<div class="selected_player_image"></div>
+							<div class="selected_player_text">
+								<div class="selected_player_text_name"></div>
+								<div class="selected_player_text_point"></div>
+							</div>
+						</span>
+					</div>
+				</div>
+				<div id="team4" class="team">
+					<div class="team_info">
+						<div class="team_info_name">와디드</div>
+						<div class="team_info_point">1000</div>
+					</div>
+					
+					<div class="team_squad">
+						<span class="selected_player lineup_top">
+							<div class="selected_player_image"></div>
+							<div class="selected_player_text">
+								<div class="selected_player_text_name"></div>
+								<div class="selected_player_text_point"></div>
+							</div>
+						</span>
+						<span class="selected_player lineup_jug">
+							<div class="selected_player_image"></div>
+							<div class="selected_player_text">
+								<div class="selected_player_text_name"></div>
+								<div class="selected_player_text_point"></div>
+							</div>
+						</span>
+						<span class="selected_player lineup_mid">
+							<div class="selected_player_image"></div>
+							<div class="selected_player_text">
+								<div class="selected_player_text_name"></div>
+								<div class="selected_player_text_point"></div>
+							</div>
+						</span>
+						<span class="selected_player lineup_bot">
+							<div class="selected_player_image"></div>
+							<div class="selected_player_text">
+								<div class="selected_player_text_name"></div>
+								<div class="selected_player_text_point"></div>
+							</div>
+						</span>
+						<span class="selected_player lineup_sup">
+							<div class="selected_player_image"></div>
+							<div class="selected_player_text">
+								<div class="selected_player_text_name"></div>
+								<div class="selected_player_text_point"></div>
+							</div>
+						</span>
+					</div>
+				</div>
+				<div id="team5" class="team">
+					<div class="team_info">
+						<div class="team_info_name">프로즌</div>
+						<div class="team_info_point">1000</div>
+					</div>
+					
+					<div class="team_squad">
+						<span class="selected_player lineup_top">
+							<div class="selected_player_image"></div>
+							<div class="selected_player_text">
+								<div class="selected_player_text_name"></div>
+								<div class="selected_player_text_point"></div>
+							</div>
+						</span>
+						<span class="selected_player lineup_jug">
+							<div class="selected_player_image"></div>
+							<div class="selected_player_text">
+								<div class="selected_player_text_name"></div>
+								<div class="selected_player_text_point"></div>
+							</div>
+						</span>
+						<span class="selected_player lineup_mid">
+							<div class="selected_player_image"></div>
+							<div class="selected_player_text">
+								<div class="selected_player_text_name"></div>
+								<div class="selected_player_text_point"></div>
+							</div>
+						</span>
+						<span class="selected_player lineup_bot">
+							<div class="selected_player_image"></div>
+							<div class="selected_player_text">
+								<div class="selected_player_text_name"></div>
+								<div class="selected_player_text_point"></div>
+							</div>
+						</span>
+						<span class="selected_player lineup_sup">
+							<div class="selected_player_image"></div>
+							<div class="selected_player_text">
+								<div class="selected_player_text_name"></div>
+								<div class="selected_player_text_point"></div>
+							</div>
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<script type="text/javascript" src="./utils.js"></script>
+	<script type="text/javascript" src="./constants.js"></script>
+	<script type="text/javascript" src="./variables.js"></script>
+	<script type="text/javascript" src="./info.js"></script>
+	<script type="text/javascript" src="./init.js"></script>
+	<script type="text/javascript" src="./game.js"></script>
+</body>
+</html>
