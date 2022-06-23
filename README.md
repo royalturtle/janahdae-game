@@ -3,3 +3,5 @@
 
 실제 플레이 영상
 ([Youtube](https://youtu.be/BmJ-OEqu4JY?t=4180))
+
+![image](https://search.pstatic.net/sunny/?src=https%3A%2F%2Fimg.theqoo.net%2Fimg%2FwJHEL.jpg&type=sc960_832)
