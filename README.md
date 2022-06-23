@@ -2,4 +2,4 @@
 ([Google Docs](https://docs.google.com/document/d/1x6ZLjIuPkSRa_AA5l5Em4OIVYu3RK5ZGJ26EXdrCnlA/edit?usp=sharing))
 
 실제 플레이 영상
-([Google Docs](https://docs.google.com/document/d/e/2PACX-1vR0QFAOO807XzepTtYKBNHFHawcA7YGpDdaUDzargaVxtC2Ml5PJ7J2tabZDnY4ULotYq2S0s7DpJXZ/pub))
+([Youtube](https://youtu.be/BmJ-OEqu4JY?t=4180))
