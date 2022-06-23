@@ -1,2 +1,5 @@
-발표 PPT 및 자료 URL
-([Google Drive](https://drive.google.com/drive/u/0/folders/1Cx0Ltr_4dD6JdfOpaHdXjI_fFmDZfOwK))
+프로그램 구조 및 동작 방식
+([Google Docs](https://docs.google.com/document/d/e/2PACX-1vR0QFAOO807XzepTtYKBNHFHawcA7YGpDdaUDzargaVxtC2Ml5PJ7J2tabZDnY4ULotYq2S0s7DpJXZ/pub))
+
+실제 플레이 영상
+([Google Docs](https://docs.google.com/document/d/e/2PACX-1vR0QFAOO807XzepTtYKBNHFHawcA7YGpDdaUDzargaVxtC2Ml5PJ7J2tabZDnY4ULotYq2S0s7DpJXZ/pub))
